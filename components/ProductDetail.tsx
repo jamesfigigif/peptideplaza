@@ -277,7 +277,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ peptide, onBack, onAddToC
                             <div className="text-center max-w-md px-4">
                                 <h3 className="text-white font-bold text-lg mb-2">Batch Verified: {new Date().getFullYear()}-A04</h3>
                                 <p className="text-slate-400 mb-6">
-                                    Our peptides undergo rigorous third-party HPLC and Mass Spectrometry analysis to ensure >{peptide.purity} purity.
+                                    Our peptides undergo rigorous third-party HPLC and Mass Spectrometry analysis to ensure &gt;{peptide.purity} purity.
                                 </p>
                                 <button className="px-6 py-3 bg-slate-800 hover:bg-slate-700 hover:text-teal-400 border border-slate-600 text-slate-200 rounded-lg transition-colors flex items-center gap-2 mx-auto font-medium">
                                     <FileText size={18} /> Download PDF Report
