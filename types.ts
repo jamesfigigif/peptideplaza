@@ -22,6 +22,7 @@ export interface Peptide {
   inStock: boolean;
   bestseller?: boolean;
   reviews: Review[];
+  image?: string;
 }
 
 export interface CartItem extends Peptide {

@@ -17,6 +17,7 @@ export const PEPTIDES: Peptide[] = [
     molarMass: '4113.58 g/mol',
     inStock: true,
     bestseller: true,
+    image: '/semaglutide.png',
     reviews: [
         { id: '1', user: 'J.D.', rating: 5, comment: 'Excellent purity, verified by third-party lab.', date: '2023-10-12', verified: true },
         { id: '2', user: 'ResearchLab_TX', rating: 5, comment: 'Consistent results in our metabolic trials.', date: '2023-11-05', verified: true }
@@ -36,6 +37,7 @@ export const PEPTIDES: Peptide[] = [
     molarMass: '4813.53 g/mol',
     inStock: true,
     bestseller: true,
+    image: '/tirzepatide.png',
     reviews: [
         { id: '3', user: 'Dr. Smith', rating: 5, comment: 'Top tier quality. Solved easily.', date: '2023-12-01', verified: true }
     ]
@@ -53,6 +55,7 @@ export const PEPTIDES: Peptide[] = [
     molarMass: '4731.33 g/mol',
     inStock: true,
     bestseller: false,
+    image: '/retatrutide.png',
     reviews: []
   },
   {
@@ -69,6 +72,7 @@ export const PEPTIDES: Peptide[] = [
     molarMass: '1419.56 g/mol',
     inStock: true,
     bestseller: true,
+    image: '/bpc157.png',
     reviews: [
         { id: '4', user: 'AthleteRecov', rating: 5, comment: 'Standard for tendon research.', date: '2023-09-20', verified: true }
     ]
@@ -113,6 +117,7 @@ export const PEPTIDES: Peptide[] = [
     purity: '>99.4%',
     inStock: true,
     bestseller: true,
+    image: '/Ipamorelin.png',
     reviews: []
   },
   {
@@ -126,6 +131,7 @@ export const PEPTIDES: Peptide[] = [
     purity: '>98.5%',
     inStock: true,
     bestseller: false,
+    image: '/mots-c.png',
     reviews: []
   },
   {
@@ -139,6 +145,7 @@ export const PEPTIDES: Peptide[] = [
     purity: '>99.0%',
     inStock: true,
     bestseller: false,
+    image: '/ghkcu.png',
     reviews: []
   },
   {
@@ -152,6 +159,7 @@ export const PEPTIDES: Peptide[] = [
     purity: '>99.2%',
     inStock: true,
     bestseller: false,
+    image: '/pt-141.png',
     reviews: []
   },
   {
@@ -165,6 +173,7 @@ export const PEPTIDES: Peptide[] = [
     purity: '>99.1%',
     inStock: false,
     bestseller: false,
+    image: '/Epitalon.png',
     reviews: []
   },
   {
@@ -178,6 +187,7 @@ export const PEPTIDES: Peptide[] = [
     purity: '>99.3%',
     inStock: true,
     bestseller: false,
+    image: '/Tesamorelin.png',
     reviews: []
   }
 ];

@@ -12,29 +12,6 @@ interface ProductDetailProps {
 const ProductDetail: React.FC<ProductDetailProps> = ({ peptide, onBack, onAddToCart }) => {
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'desc' | 'coa' | 'reviews'>('desc');
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
-  const [loadingImage, setLoadingImage] = useState(false);
-
-  useEffect(() => {
-    // Reset image when peptide changes
-    setImageUrl(null);
-    
-    // Auto-generate professional product image
-    const fetchImage = async () => {
-        setLoadingImage(true);
-        try {
-            const url = await generateProductImage(peptide.name);
-            setImageUrl(url);
-        } catch (e) {
-            console.error("Failed to generate product image", e);
-            // Fallback to null (shows CSS placeholder)
-        } finally {
-            setLoadingImage(false);
-        }
-    };
-
-    fetchImage();
-  }, [peptide]);
 
   return (
     <div className="max-w-7xl mx-auto animate-fadeIn pb-12">
@@ -63,20 +40,15 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ peptide, onBack, onAddToC
                  </div>
               </div>
               
-              {/* Product Image Logic */}
-              {loadingImage ? (
-                  <div className="flex flex-col items-center gap-3 z-10 animate-pulse">
-                      <Sparkles className="text-teal-400 animate-spin" size={32} />
-                      <p className="text-xs text-teal-400 font-bold uppercase tracking-widest">Generating Product Shot...</p>
-                  </div>
-              ) : imageUrl ? (
-                  <img 
-                    src={imageUrl} 
-                    alt={peptide.name} 
+              {/* Product Image */}
+              {peptide.image ? (
+                  <img
+                    src={peptide.image}
+                    alt={peptide.name}
                     className="w-full h-full object-cover z-10 hover:scale-105 transition-transform duration-700"
                   />
               ) : (
-                  /* Fallback CSS Visual if Generation Fails */
+                  /* Fallback CSS Visual if no image */
                   <div className="w-full h-full flex items-center justify-center relative">
                       <div className="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-blue-600/10 radial-gradient"></div>
                       <div className="relative z-10 flex flex-col items-center transform group-hover:scale-105 transition-transform duration-700">
@@ -110,18 +82,6 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ peptide, onBack, onAddToC
                   <p className="text-sm font-bold text-white">Same Day</p>
               </div>
            </div>
-           
-           {!imageUrl && !loadingImage && (
-               <button 
-                 onClick={() => {
-                     setLoadingImage(true);
-                     generateProductImage(peptide.name).then(setImageUrl).finally(() => setLoadingImage(false));
-                 }}
-                 className="w-full py-2 bg-slate-800 hover:bg-slate-700 text-teal-400 text-xs rounded-lg transition-colors border border-dashed border-slate-600 hover:border-teal-500 flex items-center justify-center gap-2"
-               >
-                 <ImageIcon size={14} /> Retry Image Generation
-               </button>
-           )}
         </div>
 
         {/* Right Column: Conversion & Details (7 cols) */}
