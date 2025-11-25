@@ -5,12 +5,15 @@ import ProductDetail from './components/ProductDetail';
 import AiAssistant from './components/ResultViewer';
 import MoleculeVisualizer from './components/ProGenerator';
 import Checkout from './components/Checkout';
-import { Peptide, CartItem } from './types';
-import { FlaskConical, ShoppingCart, MessageSquare, Atom, X, MessageCircle } from 'lucide-react';
+import { BlogPostView, BlogList } from './components/Blog';
+import { SAMPLE_BLOG_POSTS } from './data/blogPosts';
+import { Peptide, CartItem, BlogPost } from './types';
+import { FlaskConical, ShoppingCart, MessageSquare, Atom, X, MessageCircle, BookOpen } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<'catalog' | 'assistant' | 'visualizer' | 'checkout' | 'product'>('catalog');
+  const [activeTab, setActiveTab] = useState<'catalog' | 'assistant' | 'visualizer' | 'checkout' | 'product' | 'blog' | 'blogPost'>('catalog');
   const [selectedPeptide, setSelectedPeptide] = useState<Peptide | null>(null);
+  const [selectedBlogPost, setSelectedBlogPost] = useState<BlogPost | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isChatOpen, setIsChatOpen] = useState(false);
 
@@ -94,12 +97,19 @@ const App: React.FC = () => {
               <MessageSquare size={16} />
               Research AI
             </button>
-            <button 
+            <button
               onClick={() => setActiveTab('visualizer')}
               className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${activeTab === 'visualizer' ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-400 hover:text-white'}`}
             >
               <Atom size={16} />
               Structure Lab
+            </button>
+            <button
+              onClick={() => setActiveTab('blog')}
+              className={`px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 ${activeTab === 'blog' || activeTab === 'blogPost' ? 'bg-slate-800 text-white shadow-sm border border-slate-700' : 'text-slate-400 hover:text-white'}`}
+            >
+              <BookOpen size={16} />
+              Research Blog
             </button>
           </nav>
 
@@ -122,6 +132,7 @@ const App: React.FC = () => {
       {/* Mobile Nav (Simple) */}
       <div className="md:hidden flex justify-around border-b border-slate-800 bg-slate-900 p-2 sticky top-20 z-40">
          <button onClick={() => setActiveTab('catalog')} className={`p-2 rounded-lg ${activeTab === 'catalog' || activeTab === 'product' ? 'text-teal-400 bg-slate-800' : 'text-slate-500'}`}><FlaskConical size={20}/></button>
+         <button onClick={() => setActiveTab('blog')} className={`p-2 rounded-lg ${activeTab === 'blog' || activeTab === 'blogPost' ? 'text-teal-400 bg-slate-800' : 'text-slate-500'}`}><BookOpen size={20}/></button>
          <button onClick={() => setActiveTab('assistant')} className={`p-2 rounded-lg ${activeTab === 'assistant' ? 'text-teal-400 bg-slate-800' : 'text-slate-500'}`}><MessageSquare size={20}/></button>
          <button onClick={() => setActiveTab('visualizer')} className={`p-2 rounded-lg ${activeTab === 'visualizer' ? 'text-teal-400 bg-slate-800' : 'text-slate-500'}`}><Atom size={20}/></button>
          <button onClick={() => setActiveTab('checkout')} className={`p-2 rounded-lg ${activeTab === 'checkout' ? 'text-teal-400 bg-slate-800' : 'text-slate-500'}`}><ShoppingCart size={20}/></button>
@@ -169,6 +180,27 @@ const App: React.FC = () => {
         {activeTab === 'visualizer' && (
             <div className="h-[calc(100vh-200px)] animate-fadeIn">
                 <MoleculeVisualizer />
+            </div>
+        )}
+
+        {activeTab === 'blog' && (
+            <div className="animate-fadeIn">
+                <BlogList
+                    posts={SAMPLE_BLOG_POSTS}
+                    onSelectPost={(post) => {
+                        setSelectedBlogPost(post);
+                        setActiveTab('blogPost');
+                    }}
+                />
+            </div>
+        )}
+
+        {activeTab === 'blogPost' && selectedBlogPost && (
+            <div className="animate-fadeIn">
+                <BlogPostView
+                    post={selectedBlogPost}
+                    onBack={() => setActiveTab('blog')}
+                />
             </div>
         )}
 

@@ -41,3 +41,19 @@ export enum ImageSize {
 }
 
 export type LoadingState = 'idle' | 'generating' | 'loading' | 'error';
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  tags: string[];
+  author: string;
+  publishDate: string;
+  readTime: string;
+  image?: string;
+  peptide?: string;
+  location?: string;
+}
