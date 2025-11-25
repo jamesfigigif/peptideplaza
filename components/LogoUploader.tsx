@@ -40,7 +40,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onShopNow }) => {
       <div className="absolute top-0 left-0 right-0 bg-teal-900/20 backdrop-blur-sm border-b border-teal-900/30 py-2 px-6 flex justify-between items-center z-20 text-xs font-medium text-teal-400">
          <div className="flex items-center gap-2">
             <ShieldCheck size={14} />
-            <span>HPLC & Mass Spec Verified >99% Purity</span>
+            <span>HPLC & Mass Spec Verified &gt;99% Purity</span>
          </div>
          <div className="hidden md:flex items-center gap-2">
             <Timer size={14} />
