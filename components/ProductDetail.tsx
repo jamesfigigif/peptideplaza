@@ -175,23 +175,18 @@ const ProductDetail: React.FC<ProductDetailProps> = ({ peptide, onBack, onAddToC
                     )}
                     
                     <div className="flex gap-4 h-14">
-                        <div className="flex items-center bg-slate-950 rounded-xl border border-slate-600 w-32 shrink-0">
-                            <button 
-                                onClick={() => setQuantity(Math.max(1, quantity - 1))} 
-                                className="w-10 h-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 rounded-l-xl transition-colors text-xl"
-                            >-</button>
-                            <input 
-                                type="number" 
-                                value={quantity} 
-                                readOnly 
-                                className="flex-1 bg-transparent text-center text-white font-bold outline-none h-full" 
-                            />
-                            <button 
-                                onClick={() => setQuantity(quantity + 1)} 
-                                className="w-10 h-full flex items-center justify-center text-slate-400 hover:text-white hover:bg-slate-800 rounded-r-xl transition-colors text-xl"
+                        <div className="flex items-center bg-slate-900 rounded-xl border border-slate-700 w-36 shrink-0">
+                            <button
+                                onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                                className="w-12 h-full flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800 rounded-l-xl transition-colors font-bold text-2xl"
+                            >−</button>
+                            <div className="flex-1 text-center text-white font-bold text-lg">{quantity}</div>
+                            <button
+                                onClick={() => setQuantity(quantity + 1)}
+                                className="w-12 h-full flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-800 rounded-r-xl transition-colors font-bold text-2xl"
                             >+</button>
                         </div>
-                        <button 
+                        <button
                             onClick={() => onAddToCart(peptide, quantity)}
                             className="flex-1 bg-gradient-to-r from-teal-600 to-teal-500 hover:from-teal-500 hover:to-teal-400 text-white text-lg font-bold rounded-xl transition-all shadow-[0_0_20px_rgba(20,184,166,0.3)] hover:shadow-[0_0_30px_rgba(20,184,166,0.5)] active:scale-[0.98] flex items-center justify-center gap-2"
                         >

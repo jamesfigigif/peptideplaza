@@ -13,7 +13,15 @@ interface CheckoutProps {
 const Checkout: React.FC<CheckoutProps> = ({ cart, onUpdateQuantity, onRemove, onBack, onClearCart }) => {
   const [step, setStep] = useState<'cart' | 'payment' | 'success'>('cart');
   const [paymentMethod, setPaymentMethod] = useState<'BTC' | 'ETH'>('BTC');
-  const [formData, setFormData] = useState({ email: '', shipping: '' });
+  const [formData, setFormData] = useState({
+    email: '',
+    fullName: '',
+    address: '',
+    city: '',
+    state: '',
+    zipCode: '',
+    country: ''
+  });
 
   const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
   // Bulk discount: 10% off if more than 5 items total
@@ -23,8 +31,8 @@ const Checkout: React.FC<CheckoutProps> = ({ cart, onUpdateQuantity, onRemove, o
   const total = subtotal - discount + shipping;
 
   const handlePayment = () => {
-    if (!formData.email || !formData.shipping) {
-      alert("Please fill in shipping details");
+    if (!formData.email || !formData.fullName || !formData.address || !formData.city || !formData.zipCode || !formData.country) {
+      alert("Please fill in all shipping details");
       return;
     }
     setStep('payment');
@@ -53,7 +61,8 @@ const Checkout: React.FC<CheckoutProps> = ({ cart, onUpdateQuantity, onRemove, o
       `🚚 *Shipping:* ${shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}\n` +
       `💳 *Total:* $${total.toFixed(2)}\n\n` +
       `📧 *Email:* ${formData.email}\n` +
-      `🏠 *Shipping Address:*\n${formData.shipping}`;
+      `👤 *Name:* ${formData.fullName}\n` +
+      `🏠 *Shipping Address:*\n${formData.address}\n${formData.city}, ${formData.state} ${formData.zipCode}\n${formData.country}`;
 
     try {
       await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
@@ -127,17 +136,25 @@ const Checkout: React.FC<CheckoutProps> = ({ cart, onUpdateQuantity, onRemove, o
 
                <div className="bg-slate-900 p-6 rounded-xl border border-slate-700 text-center">
                   <p className="text-sm text-slate-400 mb-4">Send exactly <span className="text-white font-bold">${total.toFixed(2)}</span> equivalent to:</p>
-                  
-                  <div className="bg-white p-4 w-48 h-48 mx-auto mb-4 rounded-lg flex items-center justify-center">
-                      {/* Mock QR Code */}
-                      <div className="w-full h-full bg-black/90 pattern-grid-lg mask-qr"></div> 
+
+                  <div className="bg-white p-3 w-48 h-48 mx-auto mb-4 rounded-lg flex items-center justify-center">
+                      <img
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${paymentMethod === 'BTC' ? 'bc1pukgq6zche4hjlprakvh65xgvj5sz9gx802uu4guy7ftf976gm4esqeyumc' : '0x911A2d9c76Db9793263f56150d224245065A7235'}`}
+                        alt="Payment QR Code"
+                        className="w-full h-full"
+                      />
                   </div>
-                  
+
                   <div className="flex items-center gap-2 bg-slate-800 p-3 rounded-lg border border-slate-600 mb-4">
                       <code className="text-xs text-teal-400 flex-1 overflow-hidden text-ellipsis">
                         {paymentMethod === 'BTC' ? 'bc1pukgq6zche4hjlprakvh65xgvj5sz9gx802uu4guy7ftf976gm4esqeyumc' : '0x911A2d9c76Db9793263f56150d224245065A7235'}
                       </code>
-                      <button className="text-slate-400 hover:text-white"><Copy size={16}/></button>
+                      <button
+                        onClick={() => navigator.clipboard.writeText(paymentMethod === 'BTC' ? 'bc1pukgq6zche4hjlprakvh65xgvj5sz9gx802uu4guy7ftf976gm4esqeyumc' : '0x911A2d9c76Db9793263f56150d224245065A7235')}
+                        className="text-slate-400 hover:text-white"
+                      >
+                        <Copy size={16}/>
+                      </button>
                   </div>
 
                   <button onClick={confirmPayment} className="w-full py-4 bg-teal-600 hover:bg-teal-500 text-white font-bold rounded-xl transition-all shadow-lg">
@@ -259,17 +276,8 @@ const Checkout: React.FC<CheckoutProps> = ({ cart, onUpdateQuantity, onRemove, o
 
               <div className="space-y-4">
                   <div className="space-y-2">
-                      <label className="text-xs font-bold text-slate-400 uppercase">Shipping Address</label>
-                      <textarea 
-                        value={formData.shipping}
-                        onChange={(e) => setFormData({...formData, shipping: e.target.value})}
-                        placeholder="Enter full address..."
-                        className="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-teal-500 outline-none resize-none h-24"
-                      />
-                  </div>
-                  <div className="space-y-2">
                       <label className="text-xs font-bold text-slate-400 uppercase">Email Address</label>
-                      <input 
+                      <input
                         type="email"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
@@ -277,7 +285,71 @@ const Checkout: React.FC<CheckoutProps> = ({ cart, onUpdateQuantity, onRemove, o
                         className="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-teal-500 outline-none"
                       />
                   </div>
-                  <button 
+                  <div className="space-y-2">
+                      <label className="text-xs font-bold text-slate-400 uppercase">Full Name</label>
+                      <input
+                        type="text"
+                        value={formData.fullName}
+                        onChange={(e) => setFormData({...formData, fullName: e.target.value})}
+                        placeholder="John Doe"
+                        className="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-teal-500 outline-none"
+                      />
+                  </div>
+                  <div className="space-y-2">
+                      <label className="text-xs font-bold text-slate-400 uppercase">Street Address</label>
+                      <input
+                        type="text"
+                        value={formData.address}
+                        onChange={(e) => setFormData({...formData, address: e.target.value})}
+                        placeholder="123 Main Street, Apt 4B"
+                        className="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-teal-500 outline-none"
+                      />
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-400 uppercase">City</label>
+                          <input
+                            type="text"
+                            value={formData.city}
+                            onChange={(e) => setFormData({...formData, city: e.target.value})}
+                            placeholder="Miami"
+                            className="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-teal-500 outline-none"
+                          />
+                      </div>
+                      <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-400 uppercase">State/Province</label>
+                          <input
+                            type="text"
+                            value={formData.state}
+                            onChange={(e) => setFormData({...formData, state: e.target.value})}
+                            placeholder="FL"
+                            className="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-teal-500 outline-none"
+                          />
+                      </div>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                      <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-400 uppercase">Zip Code</label>
+                          <input
+                            type="text"
+                            value={formData.zipCode}
+                            onChange={(e) => setFormData({...formData, zipCode: e.target.value})}
+                            placeholder="33101"
+                            className="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-teal-500 outline-none"
+                          />
+                      </div>
+                      <div className="space-y-2">
+                          <label className="text-xs font-bold text-slate-400 uppercase">Country</label>
+                          <input
+                            type="text"
+                            value={formData.country}
+                            onChange={(e) => setFormData({...formData, country: e.target.value})}
+                            placeholder="USA"
+                            className="w-full bg-slate-900 border border-slate-600 rounded-xl p-3 text-sm text-white focus:ring-2 focus:ring-teal-500 outline-none"
+                          />
+                      </div>
+                  </div>
+                  <button
                     onClick={handlePayment}
                     disabled={cart.length === 0}
                     className="w-full py-4 bg-teal-600 hover:bg-teal-500 disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold rounded-xl transition-all shadow-lg shadow-teal-900/20 flex items-center justify-center gap-2"
